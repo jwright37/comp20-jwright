@@ -8,20 +8,20 @@
 		function post()
 		{
 		//make and format time
-		var time = new Date();
-		var m = time.getMonth() + 1;
-		var d = time.getDate();
-		var y = time.getFullYear();
-		var h = time.getHours();
-		var min = time.getMinutes();
-		var date = m + "/" + d + "/" + y + " " + h + ":" + min;
+		time = new Date();
+		m = time.getMonth() + 1;
+		d = time.getDate();
+		y = time.getFullYear();
+		h = time.getHours();
+		min = time.getMinutes();
+		date = m + "/" + d + "/" + y + " " + h + ":" + min;
 		//create node
-		var x = document.getElementById("msg").value;
-		var node = document.createElement("p");
-		var update = document.createTextNode(date + " - " + x);
+		x = document.getElementById("msg").value;
+		node = document.createElement("p");
+		update = document.createTextNode(date + " - " + x);
 		//insert node at top of update list
 		node.appendChild(update);
-		var list=document.getElementById("status")
+		list=document.getElementById("status")
 		list.insertBefore(node,list.childNodes[0]);
 		//clear input field
 		document.getElementById("msg").value = "";
