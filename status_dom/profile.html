@@ -17,8 +17,8 @@
 		var date = m + "/" + d + "/" + y + " " + h + ":" + min;
 		//create node
 		var x = document.getElementById("msg").value;
-		var node = document.createElement("li");
-		var update = document.createTextNode(date + " -" + x);
+		var node = document.createElement("p");
+		var update = document.createTextNode(date + " - " + x);
 		//insert node at top of update list
 		node.appendChild(update);
 		var list=document.getElementById("status")
