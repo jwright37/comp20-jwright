@@ -54,8 +54,8 @@ function initialize(){
 	car1y = 400;
 	car2x = 100;
 	car2y = 450;
-	log1x = 150;
-	log1y = 200;
+	var log1x = 150;
+	var log1y = 200;
 	car1speed = 2;
 	car2speed = 4;
 	log1speed = 1;
