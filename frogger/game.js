@@ -38,7 +38,7 @@ function draw(){
 	//cars
 	ctxt.drawImage(img,10,265,30,30,300,400,30,30);
 	ctxt.drawImage(img,48,265,30,30,100,450,30,30);
-	//log
+	//logs
 	ctxt.drawImage(img,10,156,200,30,150,200,200,30);
 }
 
