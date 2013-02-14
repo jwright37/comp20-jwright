@@ -27,7 +27,7 @@ function draw(){
 	//frog lives
 	ctxt.drawImage(img,10,330,30,30,15,527,20,20);
 	ctxt.drawImage(img,10,330,30,30,0,527,20,20);
-	//text
+	//bottom banner text
 	ctxt.font="20px Arial";
 	ctxt.fillStyle = "00FF00";
 	ctxt.fillText("Level 1",70,547);
@@ -44,6 +44,21 @@ function draw(){
 
 function initialize(){
 	//set le vars
+	lives = 3;
+	gameover = false;
+	frogx = 200;
+	frogy = 493;
+	level = 1;
+	time = 60; //s
+	car1x = 300;
+	car1y = 400;
+	car2x = 100;
+	car2y = 450;
+	log1x = 150;
+	log1y = 200;
+	car1speed = 2;
+	car2speed = 4;
+	log1speed = 1;
 }
 
 function cheats(){
