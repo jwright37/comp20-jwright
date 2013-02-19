@@ -21,7 +21,7 @@
 		update = document.createTextNode(date + " - " + x);
 		//insert node at top of update list
 		node.appendChild(update);
-		list=document.getElementById("status")
+		list=document.getElementById("status");
 		list.insertBefore(node,list.childNodes[0]);
 		//clear input field
 		document.getElementById("msg").value = "";
