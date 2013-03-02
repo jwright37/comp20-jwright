@@ -2,6 +2,8 @@
 //things i need to do:
 	//load googlemap api
 	//find,parse waldo
+	//find my location and put it on the map
+	//place the red line with fancy markers
 
 function draw()
 {
