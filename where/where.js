@@ -7,7 +7,9 @@
 
 function draw()
 {
-	findme();
+	//findme();
+	mylat = 100;
+	mylon = 100;
 	var map;
 	var mapOptions = {
 		center: new google.maps.LatLng(mylat,mylon),
