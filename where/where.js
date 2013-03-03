@@ -10,6 +10,7 @@ google.maps.event.addDomListener(window, 'load', load);
 function load()
 {
 	draw();
+	findwaldo();
 }
 
 //draws the map
@@ -46,15 +47,36 @@ function findwaldo() {
 	var request = new XMLHttpRequest();
 	
 	try {
+			console.log("foo");
 			request.open("GET", "http://messagehub.herokuapp.com/a3.json", true);
 			request.send();
-			placewaldo();
+			str = request.responseText;
+			list = JSON.parse(str);
+			for (i=0;i<list.length;i++){
+				if(list[i].name = "Waldo"){
+					var wlatlng = new google.maps.LatLng(list[i].loc.latitude,list[i].loc.longitude);
+					var wmark = new google.maps.Marker({
+						position: wlatlng,
+						map: map,
+						title: list[i].loc.note
+					});
+				}
+				if(list[i].name = "Carmen Sandiego"){
+					var cslatlng = new google.maps.LatLng(list[i].loc.latitude,list[i].loc.longitude);
+					var wmark = new google.maps.Marker({
+						position: cslatlng,
+						map: map,
+						title: list[i].loc.note
+					});
+				}
+			}
 	}
 	catch (error){
 		alert("No Waldo");
 	}
 }
 
+/*
 function placewaldo(){
 	str = request.responseText;
 	list = JSON.parse(str);
@@ -77,8 +99,8 @@ function placewaldo(){
 		}
 	}
 }
+*/
 
-/*
 //gonna hardcode the station json in (at least for now)
 function makestations (){
 	stationstr = "
@@ -742,4 +764,17 @@ function makestations (){
 	]";
 
 	stationlist = JSON.parse(stationstr);
-*/
+	for(i=0;i<stationstr.lenth;i++){
+		stationmark(station[i]);
+	}
+}
+
+function stationmark(stn){
+	var latlng = new google.maps.LatLng(stn.stop_lat,stn.stop_lng);
+	var marker = new google.maps.Marker({
+		postition: latlng,
+		map: map,
+		//icon!
+		title: stn.StationName,
+	});
+}
