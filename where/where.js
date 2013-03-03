@@ -20,18 +20,18 @@ function draw()
 		zoom: 13,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 	
-//get location of ME
-	if(navigator.geolocation){
+//get my location
+	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			var mypos = new google.maps.LatLng(position.coords.latitude, position.coords.longitiude);
+			var mypos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			var infowindow = new google.maps.InfoWindow({
 				map: map,
 				position: mypos,
 				content: 'You are here...'
 			});
-			map.setCenter(pos);
+			map.setCenter(mypos);
 		});
 	}
 }
