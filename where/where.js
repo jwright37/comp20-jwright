@@ -1,38 +1,43 @@
-//js for a3
 //things i need to do:
 	//load googlemap api
 	//find,parse waldo
 	//find my location and put it on the map
 	//place the red line with fancy markers
 
+google.maps.event.addDomListener(window, 'load', load);	
+	
+//manages program flow...
+function load()
+{
+	draw();
+}
+
+//draws the map
 function draw()
 {
-	//findme();
-	mylat = 100;
-	mylon = 100;
 	var map;
 	var mapOptions = {
-		center: new google.maps.LatLng(mylat,mylon),
 		zoom: 13,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-	var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-}
-
-function findme()
-{
+	map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	
+//get location of ME
 	if(navigator.geolocation){
-		navigator.geolocation.getCurrentPosition(function(position)){
-			mylat = position.coords.latitude;
-			mylon = position.coords.longitude;
-		}
-	};
-	else {
-		alert("Geolocation not availible");
+		navigator.geolocation.getCurrentPosition(function(position) {
+			var mypos = new google.maps.LatLng(position.coords.latitude, position.coords.longitiude);
+			var infowindow = new google.maps.InfoWindow({
+				map: map,
+				position: mypos,
+				content: 'You are here...'
+			});
+			map.setCenter(pos);
+		});
 	}
 }
 
-function findwaldo() {
+//get location of waldo and carmen
+/*function findwaldo() {
 	var request = new XMLHttpRequest();
 	
 	try {
@@ -45,6 +50,7 @@ function findwaldo() {
 	}
 }
 
+//needs to have separate markers for carmen and waldo
 function parsify(){
 	str = request.responseText;
 	list = JSON.parse(str);
@@ -52,3 +58,4 @@ function parsify(){
 		placewaldo(list[i]);
 	}
 }
+*/

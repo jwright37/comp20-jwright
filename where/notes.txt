@@ -1,0 +1,46 @@
+Hard Rail JSON and/or hard code
+
+So EVENT onclick of a station marker must
+make an info window with STATION and ARRIVAL SCHEDULE
+for NORTH and SOUTH bound trains
+
+Onload things:
+	load map
+	find location
+	place redline + markers
+	place waldo and carmen
+
+Event Driven things:
+	info window for stations
+	
+//for each station make a new marker
+function makemark(position, name)
+{
+	var marker = new google.maps.Marker({
+		position: position,
+		map: map,
+		title: name
+	});
+}
+
+//get position of waldo and carmen
+function findppl()
+{
+	var request = new XMLHttpRequest();
+	
+	try {
+			request.open("GET", "http://messagehub.herokuapp.com/a3.json", true);
+			request.send();
+			str = request.responseText;
+			list = JSON.parse(str);
+			placeppl(list);
+	}
+	catch (error){
+		alert("No Waldo");
+	}
+}
+
+function placeppl(list){
+	for(i=0;i<list.length;i++){
+		if(
+}
