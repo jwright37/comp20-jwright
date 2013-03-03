@@ -23,22 +23,20 @@ function draw()
 	map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 	
 //get my location
-	var mypos;
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			mypos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			var mypos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			var infowindow = new google.maps.InfoWindow({
 				map: map,
 				position: mypos,
-				content: "'I am here at ' + mypos.coords.latitude + ', ' + mypos.coords.latitude"
+				content: 'I am here at ' + mypos.lat() + ', ' + mypos.lng()
 			});
 			map.setCenter(mypos);
-		});
-		
-		var mymark = new google.maps.Marker({
-			position: mypos,
-			map: map,
-			title: "Your Location"
+			var mymark = new google.maps.Marker({
+				position: mypos,
+				map: map,
+				title: "Your Location"
+			});
 		});
 	}
 }
@@ -61,10 +59,26 @@ function placewaldo(){
 	str = request.responseText;
 	list = JSON.parse(str);
 	for (i=0;i<list.length;i++){
-		
+		if(list[i].name = "Waldo"){
+			var wlatlng = new google.maps.LatLng(list[i].loc.latitude,list[i].loc.longitude);
+			var wmark = new google.maps.Marker({
+				position: wlatlng,
+				map: map,
+				title: list[i].loc.note
+			});
+		}
+		if(list[i].name = "Carmen Sandiego"){
+			var cslatlng = new google.maps.LatLng(list[i].loc.latitude,list[i].loc.longitude);
+			var wmark = new google.maps.Marker({
+				position: cslatlng,
+				map: map,
+				title: list[i].loc.note
+			});
+		}
 	}
 }
 
+/*
 //gonna hardcode the station json in (at least for now)
 function makestations (){
 	stationstr = "
@@ -728,4 +742,4 @@ function makestations (){
 	]";
 
 	stationlist = JSON.parse(stationstr);
-	
+*/
