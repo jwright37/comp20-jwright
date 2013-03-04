@@ -51,8 +51,8 @@ function findwaldo() {
 	try{
 			request.open("GET", "http://messagehub.herokuapp.com/a3.json", false);
 			request.send();
-			str = request.responseText;
-			list = JSON.parse(str);
+			var str = request.responseText;
+			var list = JSON.parse(str);
 			for (i=0;i<list.length;i++){
 				if(list[i].name == "Waldo"){
 					var wlatlng = new google.maps.LatLng(list[i].loc.latitude,list[i].loc.longitude);
@@ -115,4 +115,31 @@ function markstations() {
 		stnmark.setMap(map);
 		//make info window
 	}
+	
+	makepoly(stnarray);
+}
+
+//polyline
+function makepoly(array) {
+	for(i=0;i<array.length;i++){
+		var latlngarr[i] = new google.maps.LatLng(array[i].lat, array[i].lng);
+	}
+	var poly = new google.maps.Polyline({
+		path: latlngarr,
+		strokeColor: "FF0000",
+		strokeOpacity: 1.0,
+		strokeWeight: 4,
+	});
+}
+
+//make schedule info boxes
+function getsched() {
+	var schedrqst = new XMLHttpRequest();
+	
+	try{
+		schedrqst.open("GET", "http://mbtamap-cedar.herokuapp.com/mapper/redline.json", false);
+		schedrqst.send();
+		var schedstr = responseText;
+		var schedlist = JSON.parse(schedstr);
+	
 }
