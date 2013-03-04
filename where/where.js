@@ -121,19 +121,38 @@ function markstations() {
 
 //polyline
 function makepoly(array) {
-	for(i=0;i<array.length;i++){
-		var latlngarr[i] = new google.maps.LatLng(array[i].lat, array[i].lng);
+	var mainarr = [];
+	var brancharr = [];
+	
+	for(i=0;i<17;i++){
+		mainarr[i] = new google.maps.LatLng(array[i].lat, array[i].lng);
 	}
-	var poly = new google.maps.Polyline({
-		path: latlngarr,
-		strokeColor: "FF0000",
+	
+	for(i=1;i<5;i++){
+		brancharr[i] = new google.maps.LatLng(array[i+17].lat, array[i+17].lng);
+	}
+	brancharr[0] = new google.maps.LatLng(array[13].lat, array[13].lng);
+	
+	var mainpoly = new google.maps.Polyline({
+		path: mainarr,
+		strokeColor: "#FF0000",
 		strokeOpacity: 1.0,
 		strokeWeight: 4,
 	});
+	
+	var branchpoly = new google.maps.Polyline({
+		path: brancharr,
+		strokeColor: "#FF0000",
+		strokeOpacity: 1.0,
+		strokeWeight: 4,
+	});
+	
+	mainpoly.setMap(map);
+	branchpoly.setMap(map);
 }
 
 //make schedule info boxes
-function getsched() {
+/*function getsched() {
 	var schedrqst = new XMLHttpRequest();
 	
 	try{
@@ -142,4 +161,4 @@ function getsched() {
 		var schedstr = responseText;
 		var schedlist = JSON.parse(schedstr);
 	
-}
+}*/
