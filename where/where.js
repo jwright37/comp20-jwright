@@ -1,8 +1,3 @@
-//things i need to do:
-	//load googlemap api
-	//find,parse waldo
-	//place the red line with fancy markers
-
 //onload listener
 google.maps.event.addDomListener(window, 'load', load);	
 
@@ -67,9 +62,10 @@ function placeme() {
 				map: map,
 				position: mypos,
 			});
-			var contentstr = 'You are here at ' + mypos.lat() + ', ' + mypos.lng() + '. '
-							+ 'The closest station is ' + stnarray[dist[0]].station + ', which is '
-							+ dist[1] + ' miles away.';
+			var contentstr = '<div>' + 'You are here at ' + '<br>'
+							+ mypos.lat() + ', ' + mypos.lng() + '.' + '<br>'
+							+ 'The closest station is ' + stnarray[dist[0]].station + '<br>'
+							+ 'which is ' + dist[1] + ' miles away.';
 			myinfowindow.setContent(contentstr);
 			
 			var mymark = new google.maps.Marker({
@@ -144,7 +140,7 @@ function getsched() {
 		request.onreadystatechange = markstations;
 	}
 	catch(error){
-		alert('someone fucked up');
+		//what do I put here?
 	}
 }
 
@@ -173,7 +169,7 @@ function markstations() {
 				if(sched[j].PlatformKey ==  stnarray[i].platformkey1){
 					nbstring += 'Train Arrival in: ' + sched[j].TimeRemaining + '<br>';
 				}
-				if(sched[i].PlatformKey ==  stnarray.platformkey2){
+				if(sched[j].PlatformKey ==  stnarray[i].platformkey2){
 					sbstring += 'Train Arrival in: ' + sched[j].TimeRemaining + '<br>';
 				}
 			}
@@ -182,7 +178,6 @@ function markstations() {
 					+ nbstring + '<br>'
 					+ 'SOUTH BOUND' + '<br>'
 					+ sbstring + '</div>';
-			//var contentstr = 'i am a station'; //makesched(stnarray[i]);
 			bindWindow(stnmark, content, stationwindow);
 		}
 	}
