@@ -9,6 +9,7 @@ google.maps.event.addDomListener(window, 'load', load);
 //global variables
 var map;
 var mypos;
+var schedlist;
 var stnarray = [
 		{"station":"Alewife","lat":42.395428,"lng":-71.142483,"platformkey1":"RALEN","platformkey2":"NONE"},
 		{"station":"Davis","lat":42.39674,"lng":-71.121815,"platformkey1":"RDAVN","platformkey2":"RDAVS"},
@@ -36,12 +37,11 @@ var stnarray = [
 //manages program flow...
 function load()
 {
-	getsched();
 	draw();
-	findwaldo();
-	markstations();
-	makepoly();
 	placeme();
+	findwaldo();
+	getsched();
+	makepoly();
 }
 
 //draw the map
@@ -134,42 +134,58 @@ function findwaldo() {
 	}
 }
 
-//mark all the stations and make their infowindows
-function markstations() {
-	for(i=0;i<stnarray.length;i++){
-		var latlng = new google.maps.LatLng(stnarray[i].lat,stnarray[i].lng);
-		var stnmark = new google.maps.Marker({
-			position: latlng,
-			map: map,
-			title: stnarray[i].station,
-			icon: 'thomas.jpg'
-		});
-		var stationwindow = new google.maps.InfoWindow({
-			position: latlng,
-			map:map
-		});
-		stnmark.setMap(map);
-		var contentstr = makesched(stnarray[i]);
-		bindWindow(stnmark, contentstr, stationwindow)
+//make array of schedule objects
+function getsched() {
+	request = new XMLHttpRequest();
+
+	try{
+		request.open("GET", "http://mbtamap-cedar.herokuapp.com/mapper/redline.json", true);
+		request.send();
+		request.onreadystatechange = markstations;
+	}
+	catch(error){
+		alert('someone fucked up');
 	}
 }
 
-function makesched(station){
-	var nbstring, sbstring;
-	for(i=0;i<schedlist.length;i++){
-		if(schedlist[i].PlatformKey ==  station.platformkey1){
-			nbstring += 'Train Arrival in: ' + schedlist[i].TimeRemaining + <\br>;
-		}
-		if(schedlist[i].PlatformKey ==  station.platformkey2){
-			sbstring += 'Train Arrival in: ' + schedlist[i].TimeRemaining + <\br>;
+//mark all the stations and make their infowindows
+function markstations() {
+	if(request.readyState ==  4){
+		sched = request.responseText;
+		sched = JSON.parse(sched);
+		
+		for(i=0;i<stnarray.length;i++){
+			var latlng = new google.maps.LatLng(stnarray[i].lat,stnarray[i].lng);
+			var stnmark = new google.maps.Marker({
+				position: latlng,
+				map: map,
+				title: stnarray[i].station,
+				icon: 'thomas.jpg'
+			});
+			var stationwindow = new google.maps.InfoWindow({
+				position: latlng,
+				map:map
+			});
+			stnmark.setMap(map);
+			var nbstring = "";
+			var sbstring = "";
+			for(j=0;j<sched.length;j++){
+				if(sched[j].PlatformKey ==  stnarray[i].platformkey1){
+					nbstring += 'Train Arrival in: ' + sched[j].TimeRemaining + '<br>';
+				}
+				if(sched[i].PlatformKey ==  stnarray.platformkey2){
+					sbstring += 'Train Arrival in: ' + sched[j].TimeRemaining + '<br>';
+				}
+			}
+			var content = '<div>' + stnarray[i].station + '<br>'
+					+ 'NORTH BOUND' + '<br>'
+					+ nbstring + '<br>'
+					+ 'SOUTH BOUND' + '<br>'
+					+ sbstring + '</div>';
+			//var contentstr = 'i am a station'; //makesched(stnarray[i]);
+			bindWindow(stnmark, content, stationwindow);
 		}
 	}
-	var content = <div> + station.station + <\br>
-					+ 'NORTH BOUND' + <\br>
-					+ nbstring + <\br>
-					+ 'SOUTH BOUND' + <\br>
-					+ sbstring + <\br>;
-	return content;
 }
 
 //attaches a listener to the marker
@@ -253,18 +269,3 @@ function closeststn() {
 	}
 	return [minindex, mindist];
 }
-
-//make array of schedule objects
-function getsched() {
-	var schedrqst = new XMLHttpRequest();
-	
-	try{
-		schedrqst.open("GET", "http://mbtamap-cedar.herokuapp.com/mapper/redline.json", false);
-		schedrqst.send();
-		var schedstr = responseText;
-		schedlist = JSON.parse(schedstr);
-	}
-	catch(error){
-	}
-}
-
