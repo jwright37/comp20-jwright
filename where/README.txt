@@ -16,3 +16,7 @@ I spent about 2 full days working on this assignment (20 hours).
 
 I spoke with Brett, Jake, Ann, and McCall (basically my whole group project team)
 about how they were solving the problems and what to google. 
+
+I ran out of time to work on exception handling. The js code doesnt check for errors
+with the XMLHttpRequest very well. As long as you look at the grading rubric on the a3
+site, it does everything it is supposed to.
