@@ -1,0 +1,20 @@
+Frogger Plan
+
+Things I need to do:
+	colission detection
+		boxes
+	animating the board
+		make it super reusable
+	moving the frog
+		+animation
+	counting everything
+		randomly add snakes
+		this parts easy
+	add event listeners
+		for moving, point counting
+
+Questions
+	What is .gitignore?
+	How do I make it load immediately?
+
+	
