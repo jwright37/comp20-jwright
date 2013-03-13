@@ -10,9 +10,7 @@ var ctxt;
 //run when the page loads
 function StartGame(){
 	Initialize();
-	DrawStationary();
-	DrawMoving();
-	Jump();
+	Draw();
 	Interval();
 }
 
@@ -34,6 +32,7 @@ function Initialize(){
 	level = "Level 1";
 	clocktime = 60; //s
 	CarPositions();
+	LogPositions();
 }
 
 //make car objects
@@ -42,12 +41,12 @@ function CarPositions(){
 	car1 = new Object();
 	car1.x = 0;
 	car1.y = 460;
-	car1.speed = -4;
+	car1.speed = -2;
 
 	car2 = new Object();
 	car2.x = 20;
 	car2.y = 430;
-	car2.speed = 4;
+	car2.speed = 2;
 
 	car3 = new Object();
 	car3.x = 30;
@@ -57,29 +56,29 @@ function CarPositions(){
 	car4 = new Object();
 	car4.x = 40;
 	car4.y = 370;
-	car4.speed = 4;
+	car4.speed = 2;
 
 	car5 = new Object();
 	car5.x = 50;
 	car5.y = 340;
-	car5.speed = -4;
+	car5.speed = -5;
 }
 
 function LogPositions () {
 //in order from bottom to top
 	log1 = new Object();
 	log1.x = 0;
-	log1.y = 500;
+	log1.y = 220;
 	log1.speed = 3;
 
 	log2 = new Object();
 	log2.x = 0;
-	log2.y = 550;
+	log2.y = 190;
 	log2.speed = 3;
 
 	log3 = new Object();
 	log3.x = 0;
-	log3.y = 580;
+	log3.y = 110;
 	log3.speed = 3;
 }
 
@@ -101,7 +100,8 @@ function DrawStationary(){
 //move the frogger
 function Jump(){
 	$(document).keydown(function(j){
-		if(j.keyCode == 37){	//left
+		if(j.keyCode == 37){
+			//alert("jump");	//left
 			JumpLeft();
 		}
 		if(j.keyCode == 38){	//up
@@ -134,16 +134,37 @@ function Interval() {
 //takes user input, makes updates to coordinates, and redraws game
 function GameLoop(){
 		//check user input
-		//Jump(); //changes players coordinates
+		Jump(); //changes players coordinates
 		Update(); //moves things
 		//collisions
 		Draw(); //redraws canvas
 
 }
 
-//
-function Update(){
+function Update() {
+	UpdateCars();
+	UpdateLogs();
+
+}
+
+//resets and moves car coordinates
+function UpdateCars(){
 	//first is to move all the logs and cars
+	if(car1.x <= -200){
+		car1.x += 700;
+	}
+	if(car2.x >= 650){
+		car2.x += -800;
+	}
+	if(car3.x <= -200){
+		car3.x += 700;
+	}
+	if(car4.x >= 650){
+		car4.x += -800;
+	}
+	if(car5.x <= -200){
+		car5.x += 700;
+	}
 	car1.x += car1.speed;
 	car2.x += car2.speed;
 	car3.x += car3.speed;
@@ -152,6 +173,21 @@ function Update(){
 	//then move the player
 	//count score
 
+}
+
+function UpdateLogs(){
+	if(log1.x >= 200){
+		log1.x += -800;
+	}
+	if(log1.x >= 200){
+		log1.x += -800;
+	}
+	if(log1.x >= 200){
+		log1.x += -800;
+	}
+	log1.x += log1.speed;
+	log2.x += log2.speed;
+	log3.x += log3.speed;
 }
 
 //redraw everything
@@ -179,7 +215,7 @@ function DrawMoving(){
 	//cars
 	DrawCars();
 	//logs
-	//ctxt.drawImage(img,10,156,200,30,log1.x,log1.y,200,30);
+	DrawLogs();
 }
 
 function DrawCars(){
@@ -206,8 +242,15 @@ function DrawCars(){
 }
 
 function DrawLogs(){
-	//get cars first
-
+	//2 bottom logs
+	ctxt.drawImage(img,6,229,86,23,log1.x,log1.y,86,23);
+	ctxt.drawImage(img,6,229,86,23,log1.x+120,log1.y,86,23);
+	//2 middle logs
+	ctxt.drawImage(img,6,165,181,23,log2.x,log2.y,181,23);
+	ctxt.drawImage(img,6,165,181,23,log2.x+200,log2.y,181,23);
+	//2 top logs
+	ctxt.drawImage(img,6,197,119,23,log3.x,log3.y,119,23);
+	ctxt.drawImage(img,6,197,119,23,log3.x+100,log3.y,119,23);
 }
 
 //draws a lives sprite for each life
