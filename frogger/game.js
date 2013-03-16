@@ -30,6 +30,9 @@ function Initialize(){
 	score = 0;
 	dead = false;
 	wet = false;
+	flytime = Math.random();
+	flytime = flytime*60 + 15;
+	flyloc = 0;
 	deadIter = 0;
 	scorejumpiter = 490;
 	hithome = [];
@@ -188,6 +191,7 @@ function GameLoop(){
 		Draw();
 		//handles controls and draws frog
 		UpdateFrog();
+		Fly();
 		//updates score
 		Score();
 }
@@ -532,9 +536,6 @@ function Collisions(){
 	}
 	CollisionsLogs();
 	CollisionsTurtles();
-	if(wet == true){
-		Dead();
-	}
 }
 
 function CollisionsCars(){
@@ -722,6 +723,9 @@ function ScoreHome () {
 			if(hithome[0] == false){
 				ResetFrog();
 				hithome[0] = true;
+				if(flyloc == 0){
+					score += 200;
+				}
 				score += 50;
 			}
 		}
@@ -732,6 +736,9 @@ function ScoreHome () {
 			if(hithome[1] == false){
 				ResetFrog();
 				hithome[1] = true;
+				if(flyloc == 1){
+					score += 200;
+				}
 				score += 50;
 			}
 		}
@@ -742,6 +749,9 @@ function ScoreHome () {
 			if(hithome[2] == false){
 				ResetFrog();
 				hithome[2] = true;
+				if(flyloc == 2){
+					score += 200;
+				}
 				score += 50;
 			}
 		}
@@ -752,6 +762,9 @@ function ScoreHome () {
 			if(hithome[3] == false){
 				ResetFrog();
 				hithome[3] = true;
+				if(flyloc == 3){
+					score += 200;
+				}
 				score += 50;
 			}
 		}
@@ -762,6 +775,9 @@ function ScoreHome () {
 			if(hithome[4] == false){
 				ResetFrog();
 				hithome[4] = true;
+				if(flyloc == 4){
+					score += 200;
+				}
 				score += 50;
 			}
 		}
@@ -783,4 +799,47 @@ function ScoreHome () {
 		score += 1000;
 		LevelUp();
 	}
+}
+
+function Fly () {
+	if(flytime < 0){
+		flytime = Math.random()*10 + 100;
+		flyswitch = Math.random();
+		if(flyswitch <= 0.2){
+			flyloc = 0;
+		}
+		if(flyswitch <= 0.4 && flyswitch > 0.2){
+			flyloc = 1;
+		}
+		if(flyswitch <= 0.6 && flyswitch > 0.4){
+			flyloc = 2;
+		}
+		if(flyswitch <= 0.8 && flyswitch > 0.6){
+			flyloc = 3;
+		}
+		else{
+			flyloc = 4;
+		}
+	}
+
+	if(flytime >= 0){
+		if(flyloc == 0 && hithome[0] == false){
+			ctxt.drawImage(img,140,236,16,16,14,78,16,16);
+		}
+		if(flyloc == 1 && hithome[1] == false){
+			ctxt.drawImage(img,140,236,16,16,99,78,16,16);
+		}
+		if(flyloc == 2 && hithome[2] == false){
+			ctxt.drawImage(img,140,236,16,16,182,78,16,16);
+		}
+		if(flyloc == 3 && hithome[3] == false){
+			ctxt.drawImage(img,140,236,16,16,267,78,16,16);
+		}
+		if(flyloc == 4 && hithome[4] == false){
+			ctxt.drawImage(img,140,236,16,16,355,78,16,16);
+		}
+		flytime--;
+	}
+
+	
 }
