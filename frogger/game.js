@@ -531,11 +531,9 @@ function DrawHome () {
 //kill frog if it collides with something
 function Collisions(){
 	CollisionsCars();
-	if(frog.y < 282){
-		wet = true;
-	}
 	CollisionsLogs();
 	CollisionsTurtles();
+	Drown();
 }
 
 function CollisionsCars(){
@@ -610,31 +608,25 @@ function CollisionsLogs(){
 	if(frog.y +23 >= log1.y && frog.y <= log1.y + 23){
 		if(frog.x >= log1.ax && frog.x <= log1.ax+86){
 			frog.x += log1.speed;
-			wet = false;
 		}
 		if(frog.x+86 >= log1.bx && frog.x <= log1.bx+86){
 			frog.x += log1.speed;
-			wet = false;
 		}
 	}
 	if(frog.y+23 >= log2.y && frog.y <= log2.y+23){
 		if(frog.x >= log2.ax && frog.x <= log2.ax+181){
 			frog.x += log2.speed;
-			wet = false;
 		}
 		if(frog.x  >= log2.bx && frog.x <= log2.bx+181){
 			frog.x += log2.speed;
-			wet = false;
 		}
 	}
 	if(frog.y+23 >= log3.y && frog.y <= log3.y+23){
 		if(frog.x >= log3.ax && frog.x <= log3.ax+119){
 			frog.x += log3.speed;
-			wet = false;
 		}
 		if(frog.x >= log3.bx && frog.x <= log3.bx+119){
 			frog.x += log3.speed;
-			wet = false;
 		}
 	}
 }
@@ -644,35 +636,87 @@ function CollisionsTurtles(){
 	if(frog.y +23 >= turtle1.y && frog.y <= turtle1.y+22){
 		if (frog.x > turtle1.ax && frog.x < turtle1.cx + 33) {
 			frog.x += turtle1.speed;
-			wet = false;
 		}
 		if (frog.x > turtle1.dx && frog.x < turtle1.fx + 33) {
 			frog.x += turtle1.speed;
-			wet = false;
 		}
 		if (frog.x > turtle1.gx && frog.x < turtle1.ix + 33) {
 			frog.x += turtle1.speed;
-			wet = false;
 		}
 	}
 	if(frog.y +23 >= turtle2.y && frog.y <= turtle2.y+22){
 		if (frog.x > turtle2.ax && frog.x < turtle2.bx + 33) {
 			frog.x += turtle2.speed;
-			wet = false;
 		}
 		if (frog.x > turtle2.cx && frog.x < turtle2.dx + 33) {
 			frog.x += turtle2.speed;
-			wet = false;
 		}
 		if (frog.x > turtle2.ex && frog.x < turtle2.fx + 33) {
 			frog.x += turtle2.speed;
-			wet = false;
+		}
+	}
+}
+
+//cant frogs swim?
+function Drown () {
+	if(frog.y +10 >= log1.y && frog.y <= log1.y + 10){
+		if(frog.x <= log1.ax){
+			Dead();
+		}
+		if(frog.x >= log1.bx+86){
+			Dead();
+		}
+		if(frog.x >= log1.ax + 86 && frog.x < log1.bx){
+			Dead();
+		}
+	}
+	if(frog.y+10 >= log2.y && frog.y <= log2.y+10){
+		if(frog.x <= log2.ax && frog.x > log2.bx+181){
+			Dead();
+		}
+		if(frog.x >= log2.bx+181){
+			Dead();
+		}
+		if(frog.x >= log2.ax+181 && frog.x < log2.bx){
+			Dead();
+		}
+	}
+	if(frog.y+10 >= log3.y && frog.y <= log3.y+10){
+		if(frog.x <= log3.ax){
+			Dead();
+		}
+		if(frog.x >= log3.bx+119){
+			Dead();
+		}
+		if(frog.x >= log3.ax+119 && frog.x < log3.bx){
+			Dead();
+		}
+	}
+	if(frog.y+10 >= turtle1.y && frog.y <= turtle1.y+10){
+		if (frog.x < turtle1.ax && frog.x > turtle1.ix + 33) {
+			Dead();
+		}
+		if (frog.x < turtle1.dx && frog.x > turtle1.cx + 33) {
+			Dead();
+		}
+		if (frog.x < turtle1.gx && frog.x > turtle1.fx + 33) {
+			Dead();
+		}
+	}
+	if(frog.y+10 >= turtle2.y && frog.y <= turtle2.y+10){
+		if (frog.x < turtle1.ax && frog.x > turtle1.fx + 33) {
+			Dead();
+		}
+		if (frog.x < turtle1.cx && frog.x > turtle1.bx + 33) {
+			Dead();
+		}
+		if (frog.x < turtle1.ex && frog.x > turtle1.dx + 33) {
+			Dead();
 		}
 	}
 }
 
 function Dead(){
-	console.log("DEAD");
 	dead = true;
 	frog.lives--;
 	ResetFrog();
@@ -697,6 +741,7 @@ function Score(){
 	ScoreJumpUp();
 	ScoreHome();
 	BonusLife();
+	GameOver();
 }
 
 //checks if the player has scored 10,000 points
@@ -840,6 +885,12 @@ function Fly () {
 		}
 		flytime--;
 	}
+}
 
-	
+function GameOver () {
+	if (frog.lives <= 0){
+		ctxt.font="20px Arial";
+		ctxt.fillStyle = "00FF00";
+		ctxt.fillText("GAME OVER",145,310);
+	}
 }
