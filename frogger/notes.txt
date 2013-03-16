@@ -1,6 +1,4 @@
 Frogger Plan
 
 Things left to do:
-	Death with water
-	Fly
 	Dead frog animation

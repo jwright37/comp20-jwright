@@ -29,7 +29,6 @@ function Initialize(){
 	//set le vars
 	score = 0;
 	dead = false;
-	wet = false;
 	flytime = Math.random();
 	flytime = flytime*60 + 15;
 	flyloc = 0;
@@ -171,6 +170,11 @@ function Jump(){
 			frog.hop = true;
 			frog.hopIter = 0;	
 			frog.hopDir = "down";
+		}
+		if(gameover == true){
+			if(j.keyCode == 38){
+				Initialize();
+			}
 		}
 	});
 }
@@ -892,5 +896,6 @@ function GameOver () {
 		ctxt.font="20px Arial";
 		ctxt.fillStyle = "00FF00";
 		ctxt.fillText("GAME OVER",145,310);
+		gameover = true;
 	}
 }
