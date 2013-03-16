@@ -4,6 +4,7 @@
 
 //globals
 var img;
+var deadimg;
 var c;
 var ctxt;
 
@@ -23,9 +24,18 @@ function Initialize(){
 	//get image
 	img = new Image(); 
 	img.src = "assets/frogger_sprites.png";
+	deadimg = new Image();
+	deadimg.src = "assets/dead_frog.png";
 	//set le vars
 	score = 0;
+	dead = false;
+	wet = false;
+	deadIter = 0;
 	scorejumpiter = 490;
+	hithome = [];
+	for (i=0;i<5;i++){
+		hithome[i] = false;
+	}
 	gameover = false;
 	level = 1;
 	clocktime = 60; //s
@@ -176,7 +186,10 @@ function GameLoop(){
 		Collisions();
 		//redraw the canvas
 		Draw();
+		//handles controls and draws frog
 		UpdateFrog();
+		//updates score
+		Score();
 }
 
 //changes all the coordinates
@@ -189,66 +202,95 @@ function Update() {
 //jumps the frog
 function UpdateFrog(){
 	//console.log(frog.hop);
-	if(frog.hop == true){
-		if(frog.hopDir == "up"){
-			if(frog.hopIter < 5){
-				frog.y -= 6.909091;
-				ctxt.drawImage(img,46,366,23,26,frog.x,frog.y,23,26); //jumping up
+	if(dead == false){
+		if(frog.hop == true){
+			if(frog.hopDir == "up"){
+				if(frog.hopIter < 5){
+					if(frog.y > 60){
+						frog.y -= 6.909091;
+					}
+					ctxt.drawImage(img,46,366,23,26,frog.x,frog.y,23,26); //jumping up
+				}
+				frog.hopIter++;
+				if(frog.hopIter >= 5){
+					frog.hop = false;
+					frog.hopIter = 0;
+				}
 			}
-			frog.hopIter++;
-			if(frog.hopIter >= 5){
-				frog.hop = false;
-				frog.hopIter = 0;
+			if(frog.hopDir == "down"){
+				if(frog.hopIter < 5){
+					if(frog.y < 490){
+						frog.y += 6.909091;
+					}
+					ctxt.drawImage(img,114,366,22,25,frog.x,frog.y,22,25); //jumping down
+				}
+				frog.hopIter++;
+				if(frog.hopIter >= 5){
+					frog.hop = false;
+					frog.hopIter = 0;
+				}
+			}
+			if(frog.hopDir == "left"){
+				if(frog.hopIter < 5){
+					if(frog.x > 0){
+						frog.x -= 6.909091;
+					}
+					ctxt.drawImage(img,112,338,26,23,frog.x,frog.y,26,23); //jumping left
+				}
+				frog.hopIter++;
+				if(frog.hopIter >= 5){
+					frog.hop = false;
+					frog.hopIter = 0;
+				}
+			}
+			if(frog.hopDir == "right"){
+				if(frog.hopIter <= 5){
+					if(frog.x < 370){
+						frog.x += 6.909091;
+					}
+					ctxt.drawImage(img,43,335,25,22,frog.x,frog.y,25,23); //jumping right
+				}
+				frog.hopIter++;
+				if(frog.hopIter >= 5){
+					frog.hop = false;
+					frog.hopIter = 0;
+				}	
 			}
 		}
-		if(frog.hopDir == "down"){
-			if(frog.hopIter < 5){
-				frog.y += 6.909091;
-				ctxt.drawImage(img,114,366,22,25,frog.x,frog.y,22,25); //jumping down
+		else{
+			if(frog.hopDir == "up"){
+				ctxt.drawImage(img,12,369,23,17,frog.x,frog.y,23,17); //facing up
 			}
-			frog.hopIter++;
-			if(frog.hopIter >= 5){
-				frog.hop = false;
-				frog.hopIter = 0;
+			if(frog.hopDir == "down"){
+				ctxt.drawImage(img,80,369,23,17,frog.x,frog.y,23,17); //facing down
 			}
-		}
-		if(frog.hopDir == "left"){
-			if(frog.hopIter < 5){
-				frog.x -= 6.909091;
-				ctxt.drawImage(img,112,338,26,23,frog.x,frog.y,26,23); //jumping left
+			if(frog.hopDir == "left"){
+				ctxt.drawImage(img,82,335,18,23,frog.x,frog.y,18,23); //facing left
 			}
-			frog.hopIter++;
-			if(frog.hopIter >= 5){
-				frog.hop = false;
-				frog.hopIter = 0;
-			}
-		}
-		if(frog.hopDir == "right"){
-			if(frog.hopIter <= 5){
-				frog.x += 6.909091;
-				ctxt.drawImage(img,43,335,25,22,frog.x,frog.y,25,23); //jumping right
-			}
-			frog.hopIter++;
-			if(frog.hopIter >= 5){
-				frog.hop = false;
-				frog.hopIter = 0;
+			if(frog.hopDir == "right"){
+				ctxt.drawImage(img,13,334,17,23,frog.x,frog.y,17,23); //facing right
 			}
 		}
 	}
-	else{
-		if(frog.hopDir == "up"){
-			ctxt.drawImage(img,12,369,23,17,frog.x,frog.y,23,17); //facing up
+	if(dead==true){
+		hop = false;
+		hopIter = 10;
+		if(deadIter < 10){
+			ctxt.drawImage(deadimg,0,0,30,30,frog.x,frog.y,30,30);
+			deadIter++;
 		}
-		if(frog.hopDir == "down"){
-			ctxt.drawImage(img,80,369,23,17,frog.x,frog.y,23,17); //facing down
-		}
-		if(frog.hopDir == "left"){
-			ctxt.drawImage(img,82,335,18,23,frog.x,frog.y,18,23); //facing left
-		}
-		if(frog.hopDir == "right"){
-			ctxt.drawImage(img,13,334,17,23,frog.x,frog.y,17,23); //facing right
+		if(deadIter >= 10){
+			deadIter = 0;
+			dead = false;
+			ResetFrog();
 		}
 	}
+}
+
+//resets the frog in the event of death
+function ResetFrog () {
+	frog.x = 200;
+	frog.y = 493;
 }
 
 //resets and moves car coordinates
@@ -362,9 +404,9 @@ function DrawMoving(){
 	//put score in here
 	ctxt.font="20px Arial";
 	ctxt.fillStyle = "00FF00";
-	ctxt.fillText("Level 1",90,547);
+	ctxt.fillText("Level "+level,90,543);
 	ctxt.font="13px Arial";
-	ctxt.fillText("Score: 00         Highscore: 00",0,562);
+	ctxt.fillText("Score: " + score,0,562);
 	//cars
 	DrawCars();
 	//logs
@@ -373,6 +415,8 @@ function DrawMoving(){
 	DrawTurtles(); //needs animation!
 	//frog lives
 	DrawLives();
+	//hit home markers
+	DrawHome();
 }
 
 //draws the cars
@@ -440,17 +484,62 @@ function DrawLives(){
 	}
 }
 
+//draws blue cirles or frogs on home spaces
+function DrawHome () {
+//i'd like to loop this but i had to hardcode the coordinates
+	if(hithome[0] == true){
+		ctxt.drawImage(img,80,369,23,17,14,76,23,17); //facing down
+	}
+	else{
+		ctxt.fillStyle="#00FF00";
+		ctxt.fillRect(14,76,25,25);
+	}
+	if(hithome[1] == true){
+		ctxt.drawImage(img,80,369,23,17,99,76,23,17); //facing down
+	}
+	else{
+		ctxt.fillStyle="#00FF00";
+		ctxt.fillRect(99,76,25,25);
+	}
+	if(hithome[2] == true){
+		ctxt.drawImage(img,80,369,23,17,184,76,23,17); //facing down
+	}
+	else{
+		ctxt.fillStyle="#00FF00";
+		ctxt.fillRect(184,76,25,25);
+	}
+	if(hithome[3] == true){
+		ctxt.drawImage(img,80,369,23,17,267,76,23,17); //facing down
+	}
+	else{
+		ctxt.fillStyle="#00FF00";
+		ctxt.fillRect(267,76,25,25);
+	}
+	if(hithome[4] == true){
+		ctxt.drawImage(img,80,369,23,17,354,76,23,17); //facing down
+	}
+	else{
+		ctxt.fillStyle="#00FF00";
+		ctxt.fillRect(354,76,25,25);
+	}
+}
+
 //kill frog if it collides with something
 function Collisions(){
 	CollisionsCars();
+	if(frog.y < 282){
+		wet = true;
+	}
 	CollisionsLogs();
 	CollisionsTurtles();
+	if(wet == true){
+		Dead();
+	}
 }
 
 function CollisionsCars(){
 	//check y with cars
 	if(frog.y+23 >= car1.y && frog.y <= car1.y+26){
-		//alert('y');
 		//check x
 		if(frog.x+26 >= car1.ax && frog.x <= car1.ax+23){
 			Dead();
@@ -517,71 +606,103 @@ function CollisionsCars(){
 }
 
 function CollisionsLogs(){
-	if(frog.y+23 >= log1.y && frog.y <= log1.y+23){
-		if(frog.x+86 >= log1.ax && frog.x <= log1.ax+86){
+	if(frog.y +23 >= log1.y && frog.y <= log1.y + 23){
+		if(frog.x >= log1.ax && frog.x <= log1.ax+86){
 			frog.x += log1.speed;
+			wet = false;
 		}
 		if(frog.x+86 >= log1.bx && frog.x <= log1.bx+86){
 			frog.x += log1.speed;
+			wet = false;
 		}
 	}
 	if(frog.y+23 >= log2.y && frog.y <= log2.y+23){
-		if(frog.x+181 >= log2.ax && frog.x <= log2.ax+181){
+		if(frog.x >= log2.ax && frog.x <= log2.ax+181){
 			frog.x += log2.speed;
+			wet = false;
 		}
-		if(frog.x+181 >= log2.bx && frog.x <= log2.bx+181){
+		if(frog.x  >= log2.bx && frog.x <= log2.bx+181){
 			frog.x += log2.speed;
+			wet = false;
 		}
 	}
 	if(frog.y+23 >= log3.y && frog.y <= log3.y+23){
-		if(frog.x+119 >= log3.ax && frog.x <= log3.ax+119){
+		if(frog.x >= log3.ax && frog.x <= log3.ax+119){
 			frog.x += log3.speed;
+			wet = false;
 		}
-		if(frog.x+119 >= log3.bx && frog.x <= log3.bx+119){
+		if(frog.x >= log3.bx && frog.x <= log3.bx+119){
 			frog.x += log3.speed;
+			wet = false;
 		}
 	}
 }
 
 function CollisionsTurtles(){
 	//y coord
-	if(frog.y >= turtle1.y && frog.y <= turtle1.y){
-		if (frog.x) {};
-
+	if(frog.y +23 >= turtle1.y && frog.y <= turtle1.y+22){
+		if (frog.x > turtle1.ax && frog.x < turtle1.cx + 33) {
+			frog.x += turtle1.speed;
+			wet = false;
+		}
+		if (frog.x > turtle1.dx && frog.x < turtle1.fx + 33) {
+			frog.x += turtle1.speed;
+			wet = false;
+		}
+		if (frog.x > turtle1.gx && frog.x < turtle1.ix + 33) {
+			frog.x += turtle1.speed;
+			wet = false;
+		}
 	}
-
+	if(frog.y +23 >= turtle2.y && frog.y <= turtle2.y+22){
+		if (frog.x > turtle2.ax && frog.x < turtle2.bx + 33) {
+			frog.x += turtle2.speed;
+			wet = false;
+		}
+		if (frog.x > turtle2.cx && frog.x < turtle2.dx + 33) {
+			frog.x += turtle2.speed;
+			wet = false;
+		}
+		if (frog.x > turtle2.ex && frog.x < turtle2.fx + 33) {
+			frog.x += turtle2.speed;
+			wet = false;
+		}
+	}
 }
 
 function Dead(){
 	console.log("DEAD");
 	dead = true;
 	frog.lives--;
-	frog.x = 200;
-	frog.y = 490;
-
+	ResetFrog();
 }
 
 //increments the speeds of everything
 function LevelUp(){
 	level++;
-	car1.speed++;
+	car1.speed--;
 	car2.speed++;
-	car3.speed++;
+	car3.speed--;
 	car4.speed++;
-	car5.speed++;
+	car5.speed--;
 	log1.speed++;
 	log2.speed++;
 	log3.speed++;
-	turtle1.speed++;
-	turtle2.speed++;
+	turtle1.speed--;
+	turtle2.speed--;
+}
+
+function Score(){
+	ScoreJumpUp();
+	ScoreHome();
+	BonusLife();
 }
 
 //checks if the player has scored 10,000 points
 //if true, give the player another life and reset point counter
 function BonusLife(){
-	if(pointcounter >= 10000 && frog.lives <= 4){
+	if((score % 10000) == 0 && frog.lives < 5){
 		frog.lives++;
-		pointcounter = (pointcounter - 1000);
 	}
 }
 
@@ -589,5 +710,77 @@ function ScoreJumpUp () {
 	if(frog.y < scorejumpiter){
 		score += 10;
 		scorejumpiter -= 34.545455;
+	}
+}
+
+function ScoreHome () {
+	if(frog.y < 100){
+		if(frog.x > 12 && frog.x < 43){
+			if(hithome[0] == true){
+				Dead();
+			}
+			if(hithome[0] == false){
+				ResetFrog();
+				hithome[0] = true;
+				score += 50;
+			}
+		}
+		if(frog.x > 97 && frog.x < 129){
+			if(hithome[1] == true){
+				Dead();
+			}
+			if(hithome[1] == false){
+				ResetFrog();
+				hithome[1] = true;
+				score += 50;
+			}
+		}
+		if(frog.x > 182 && frog.x < 214){
+			if(hithome[2] == true){
+				Dead();
+			}
+			if(hithome[2] == false){
+				ResetFrog();
+				hithome[2] = true;
+				score += 50;
+			}
+		}
+		if(frog.x > 265 && frog.x < 299){
+			if(hithome[3] == true){
+				Dead();
+			}
+			if(hithome[3] == false){
+				ResetFrog();
+				hithome[3] = true;
+				score += 50;
+			}
+		}
+		if(frog.x > 352 && frog.x < 381){
+			if(hithome[4] == true){
+				Dead();
+			}
+			if(hithome[4] == false){
+				ResetFrog();
+				hithome[4] = true;
+				score += 50;
+			}
+		}
+		else {
+			Dead();
+		}
+	}
+
+	var homecount = 0;
+	for(i=0;i<5;i++){
+		if(hithome[i] == true){
+			homecount++;
+		}
+	}
+	if(homecount == 5){
+		for(i=0;i<5;i++){
+			hithome[i] = false;
+		}
+		score += 1000;
+		LevelUp();
 	}
 }

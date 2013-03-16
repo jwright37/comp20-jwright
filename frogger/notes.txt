@@ -24,10 +24,10 @@ How to Jump?
 	from 0-
 
 Things left to do:
-	Scoring
+		Scoring
 	Death with water
 	Reset with death
-	Level progression
+		Level progression
 	Fly
 	Sounds
 	Dead frog animation
