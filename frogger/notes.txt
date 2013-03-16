@@ -18,3 +18,16 @@ Questions
 	How do I make it load immediately?
 
 	
+How to Jump?
+	iterator inside loop that is checked on each pass of the interval
+	when key is pressed, loop is set to true, iterator set to 0
+	from 0-
+
+Things left to do:
+	Scoring
+	Death with water
+	Reset with death
+	Level progression
+	Fly
+	Sounds
+	Dead frog animation
