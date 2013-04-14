@@ -12,14 +12,24 @@
 		var request = new XMLHttpRequest();
 		
 		try {
-			request.open("GET", "http://messagehub.herokuapp.com/lab8.json", false);
+			request.open("GET", "http://messagehub.herokuapp.com/lab8.json", true);
 			request.send();
-			str = request.responseText;
-			parse(str);
+			//request.onreadystatechange(
+			getajob();
 		}
 		catch (error) {
 			alert("Loading Failed");
 		}
+	}
+	
+	function getajob(){
+		//if(request.readyState == 4 && request.status == 200){
+			str = request.responstText;
+			parse(str);
+		//}
+		//else{
+		//	alert("not ready");
+		//}
 	}
 	
 	function parse(str){
