@@ -25,7 +25,6 @@ app.all('/', function(request, response, next){
 
 //root page of web app, shows all scores
 app.get('/', function(request, response) {
-	response.set('Content-Type', 'text/html');
 	var output = '<h1>TABLE OF HIGHSCORES</h1><table border="1"><tr><td>Game</td><td>Username</td><td>Score</td><td>Created At</td></tr>';
 	db.collection('highscores', function(err, scores){
 		scores.find().sort({created_at:0}, function(err, doc){
@@ -35,22 +34,12 @@ app.get('/', function(request, response) {
 				}
 				else {
 					db.close();
+					response.set('Content-Type', 'text/html');
 					response.send(output+'</table>');
 				}
 			});
 		});
 	});
-});
-
-//test insert
-app.get('/insert', function(request, response) {
-	db.collection('highscores', function(err, collection){
-		var date = new Date();
-		var testdoc = {"game_title":"testing","username":"admin","score":"666","created_at":date};
-		collection.insert(testdoc);
-	});
-	response.set('text/html');
-	response.send('posted test data');
 });
 
 //usersearch, search collections for username
@@ -66,14 +55,14 @@ app.post('/search', function(request, response) {
 	var searchname = request.body.username;
 	var output = '<h1>'+searchname+'&#39s Scores</h1><table border="1"><tr><td>Game</td><td>Username</td><td>Score</td><td>Created At</td></tr>';
 	db.collection('highscores', function(err, scores){
-		scores.find({username:searchname}).sort({created_at:0}, function(err, doc){
+		scores.find({username:searchname}).sort({score:1}, function(err, doc){
 			doc.each(function(err, entry){
 				if(entry != null){
 					output += '<tr><td>'+entry.game_title+'</td><td>'+entry.username+'</td><td>'+entry.score+'</td><td>'+entry.created_at+'</td></tr>';
 				}
 				else {
 					db.close();
-					response.set('text/html');
+					response.set('Content-Type', 'text/html');
 					response.send(output+'</table>');
 				}
 			});
@@ -81,23 +70,21 @@ app.post('/search', function(request, response) {
 	});
 });
 
-//get API, top ten for a game
+//get API, top ten for a specific game
 app.get('/highscores.json', function(request, response){
-	var searchtitle = request.query.game_title;
-	console.log(seachtitle);
-	var output = '[';
-	//search for a specific game title and return the top ten
+	var game = request.query.game_title;
+	var output = '';
 	db.collection('highscores', function(err, scores){
-	 	if(searchtitle != null){
-			scores.find({game_title:searchtitle}).sort({created_at:0}, function(err, doc){
+	 	if(game){
+			scores.find({"game_title":game}).sort({score:1}).limit(10, function(err, doc){
 				doc.each(function(err, entry){
 					if(entry != null){
-						output += '{"game_title":"'+entry.game_title+'","username":"'+entry.username+'","score":"'+entry.score+'","created_at":"'+entry.created_at+'"},';
+						output += JSON.stringify(entry);
 					}
 					else {
 						db.close();
-						response.set('text/html');
-						response.send(output+']');
+						response.set('Content-Type', 'text/json');
+						response.send(output);
 					}
 				});
 			});
@@ -107,27 +94,17 @@ app.get('/highscores.json', function(request, response){
 
 //post API, add to highscores collection
 app.post('/submit.json', function(request, response) {
-	var game_title;
-	var username;
-	var score;
-	var created_at;
-	var object = request.body;
-	if(object.game_title){
-		game_title = object.game_title;
-	}	
-	if(object.username){
-		username = object.username;
-	}	
-	if(object.score){
-		score = object.score;
-	}	
-	if(object.game_title){
-		created_at = object.created_at;
-	}	
+	var game_title = request.body.game_title;
+	var username = request.body.username;
+	var score = parseInt(request.body.score);
+	var created_at = new Date();
+	var insertion = {"game_title":game_title,"username":username,"score":score,"created_at":created_at};
  	db.collection('highscores', function(err, collection){
  		if(!err){
- 			collection.insert({"game_title":gametitle,"username":username,"score":score,"created_at":created_at});
+ 			collection.insert(insertion);
+			response.send('Added submission to database');
  		}
+ 		db.close();
  	});
 });
 

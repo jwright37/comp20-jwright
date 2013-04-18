@@ -10,3 +10,5 @@ the output is plain html. I spent a long time learning about Node, only to reali
 and routing. 
 
 I had lots of problems with figuring out what different mongo functions return and what member functions are availible to them.
+
+Ming answered lots of questions during class today, which helped clear up some of my confusion on various topics. 
