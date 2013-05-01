@@ -7,6 +7,11 @@
 	<script>
 		function post()
 		{
+			MakeDate();
+			MakeMsg();
+		}
+		function MakeDate()
+		{
 		//make and format time
 		time = new Date();
 		m = time.getMonth() + 1;
@@ -15,10 +20,23 @@
 		h = time.getHours();
 		min = time.getMinutes();
 		date = m + "/" + d + "/" + y + " " + h + ":" + min;
+		}
+		function MakeMsg()
+		{
 		//create node
 		x = document.getElementById("msg").value;
+		msg = date + " - " + x;
+		localStorage[new Date().getTime()] = msg;
+		Reload();
+		}
+		function Reload() {
+			for (key in localStorage) {
+				MakeNode(localStorage[key]);
+			}
+		}
+		function MakeNode(message) {
 		node = document.createElement("p");
-		update = document.createTextNode(date + " - " + x);
+		update = document.createTextNode(message);
 		//insert node at top of update list
 		node.appendChild(update);
 		list=document.getElementById("status");

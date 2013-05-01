@@ -1,0 +1,4 @@
+Frogger Plan
+
+Things left to do:
+	Dead frog animation
