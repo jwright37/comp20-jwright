@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Security Report</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body> 
+	<h1 id="title">ScoreCenter Security Report</h1>
+	<p id="namedate">By: John Wright</br>April 30th, 2013</p>    
+	<h2>Introduction</h2>     
+		<p>The product being evaluated in this report is a highscore database web application. The function of the product is to allow users to submit scores from HTML5 games to the database and to retrieve these scores later based on game type or username. In this report, the security vulnerabilities of the product will be assessed in order to improve the security of the web application and make the product more robust. </p>
+	<hr>
+	<h2>Methodology</h2>
+		<p>At the beginning of the testing, black-box testing was used on the web application. I tried to find security weaknesses by exploring different pages within the app and giving the app unexpected inputs where I could. I was not successful in finding any security problems using the black-box method, so I read through the client's source code and used some security applications to search for vulnerabilities. To analyze the security of this web application, I used Burp Suite. The tools in Burp Suite were very helpful in finding vulnerabilities in the site. Also, Paros provided an additional tool to search for invulnerabilities. </p> 
+	<hr>
+	<h2>Abstract of Findings</h2>
+		<p>Three main security vulnerabilities were found within the scope of this study. They are the alteration of HTTP data using a proxy, the lack of input validation, and cross-side scripting.</p>
+		<p>First, the HTTP requests of the data can be altered using a proxy server. This is problematic because after a user initially sends a GET request, he can alter it to a POST request. By doing this, the user can send data where the web application is not expecting it. Second, the user can use the submit API to post anything into the database, as long as it has the "game_title", "username", and "score" fields. This allows the database to contain any type of data within it. By using the submit.json API, the user can submit data of nearly any size and type. The lack of input sanitization means that the user can put special characters into the database, which could be misinterpreted by the web application or the database server and lead to errors. Thirdly, cross-side scripting is a threat because the user could enter Javascript code into the database using the submit.json functionality. This script could be run when another user accesses the data and tries to render it in an html page. The browser could execute the script and access local data or do any number of insecure tasks.</p>
+
+	<hr>
+	<h2>Issues Found</h2>
+		<p>Proxy Altercation of HTTP Data</p>
+		<p>Issue: Proxy Altercation of HTTP Data </br>
+			Location: Everywhere </br>
+			Severity: Low </br>
+			Description: A user can use a proxy server to change the requests and responses received by the web application. This causes security problems by introducing data that is not normally accepted by the application. This is similar to cross-site request forgery.</br>
+			Resolution: This could be solved with the use of cookies and request validation. So long as the  </p>
+		<p>Lack of Input Validation</p>
+		<p>Issue: Lack of Input Validation</br>
+			Location: submit.json API</br>
+			Severity: Medium</br>
+			Description: A user can submit any type of string into the database as long as it is within the fields "game_title", "username", or "score". This is problematic because the user could enter Javascript code or huge amounts of data to create unexpected errors for the database.</br>
+			Resolution: Adding more input sanitation such as converting the input to a string and limiting the number of characters that can be entered would reduce the capability of a user to enter data that could cause errors. Formating out special characters would help as well. </p>
+		<p>Cross Side Scripting</p>
+		<p>Issue: XSS</br>
+			Location: submit.json API</br>
+			Severity: High</br>
+			Description: When a user inputs Javascript into the database, the code can be executed when another user accesses the database and uses the code stored there.</br>
+			Resolution: Sanitize the input before it is entered into the database. To do this, limit the size of the entry, convert special characters to their respective character codes, and make sure the data is sent in json format.</p>
+	<hr>
+	<h2>Conclusion</h2>
+	<p>Overall, this web application was surprisingly secure for the amount of experience with security that our class has. The use of the jade template engine removes lots of problems with non-persistent cross-side scripting. However, the input sanitation of the submit.json API should be stronger. The database should only accept standard format integers and strings, without the possibility of storing Javascript code.</p>
+
+</body>
+
+</html>
